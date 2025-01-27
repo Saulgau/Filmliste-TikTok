@@ -226,17 +226,7 @@
     <script>
         const movies = [
             {
-                title: "The Green Mile",
-                date: "2025-01-27",
-                time: "20:15",
-                image: "https://play-lh.googleusercontent.com/NujYB6b3mjl5d99ENP0aawFZgW3NtTQxMp4dXC33Kuh9_FeVRDviwuUFU4CFveeVtc7KGw",
-                description: "Man schreibt das Jahr 1935. Paul Edgecomb ist Leiter des Traktes E der Strafanstalt Cold Mountain, in der zum Tode verurteilte Häftlinge darauf warten, ihren letzten Gang anzutreten. Edgecoms Leben erfährt eine unerwartete Wendung, als eines Tages der Häftling John Coffey eingeliefert wird, ein riesenhafter, merkwürdig ruhiger Mann. Doch Coffey scheint mit einer übernatürlichen Gabe gesegnet zu sein, die die Menschen im Todestrakt für immer verändern soll.",
-                badge: "Krimi/Fantasy",
-                runtime: "189",
-                rating: "FSK 12"
-            },
-            {
-                title: "Vorstellung verschoben Sonic the Hedgehog 3",
+                title: "Sonic the Hedgehog 3",
                 date: "2025-01-28",
                 time: "20:15",
                 image: "https://m.media-amazon.com/images/M/MV5BYTY3MWZjOTMtMzEwMS00OTcyLWI4MmEtODQwNjllYzZmMWJmXkEyXkFqcGc@._V1_.jpg",
@@ -246,7 +236,16 @@
                 rating: "FSK 12"
             }
         ];
-
+           {
+                title: "Gladiator II",
+                date: "2025-01-29",
+                time: "20:15",
+                image: "https://de.web.img2.acsta.net/img/93/01/930169505dfefb05fc3a651304df8c29.jpg",
+                description: "Lucius, der Sohn des ehemaligen Gladiatoren Maximus, wird nach einem überfall des römischen Reiches dazu gezwungen, selbst in der Arena zu kämpfen. Er schwört Rache an Marcus Acacius, dem Mann, der ihn gefangen genommen hat, zu nehmen. Gleichzeitig plant sein Besitzer, Macrinus, einen Coup gegen die beiden römischen Kaiser Caracalla und Geta durchzuführen - und setzt dabei auch auf die Hilfe von Lucius.",
+                badge: "Action/Abenteuer",
+                runtime: "148",
+                rating: "FSK 16"
+            },
         function formatDate(dateStr, timeStr) {
             const date = new Date(dateStr + 'T' + timeStr);
             return date.toLocaleDateString('de-DE', {
