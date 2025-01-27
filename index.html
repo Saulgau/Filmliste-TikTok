@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filmvorführungen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.5;
+            background: #f3f4f6;
+            color: #1f2937;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .movie-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+
+        .movie-card {
+            background: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .movie-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .movie-content {
+            padding: 1.5rem;
+        }
+
+        .movie-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .movie-datetime {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .movie-description {
+            color: #4b5563;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="movie-grid" id="movieGrid"></div>
+    </div>
+
+    <script>
+        // ===== HIER IHRE FILME EINFÜGEN =====
+        const movies = [
+            {
+                title: "Der erste Film",
+                date: "2025-01-28",  // Format: YYYY-MM-DD
+                time: "20:00",       // Format: HH:MM
+                image: "/api/placeholder/400/320",  // Bildpfad hier einfügen
+                description: "Beschreibung des ersten Films..."
+            },
+            {
+                title: "Der zweite Film",
+                date: "2025-01-29",
+                time: "19:30",
+                image: "/api/placeholder/400/320",
+                description: "Beschreibung des zweiten Films..."
+            },
+            // Weitere Filme hier einfügen...
+        ];
+        // ===== ENDE DER FILM-LISTE =====
+
+        // Funktion zum Formatieren des Datums
+        function formatDate(dateStr, timeStr) {
+            const date = new Date(dateStr + 'T' + timeStr);
+            return date.toLocaleDateString('de-DE', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            }) + ' - ' + timeStr + ' Uhr';
+        }
+
+        // Filme auf der Seite anzeigen
+        function displayMovies() {
+            const grid = document.getElementById('movieGrid');
+            
+            movies.forEach(movie => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.innerHTML = `
+                    <img class="movie-image" src="${movie.image}" alt="${movie.title}">
+                    <div class="movie-content">
+                        <h2 class="movie-title">${movie.title}</h2>
+                        <div class="movie-datetime">${formatDate(movie.date, movie.time)}</div>
+                        <p class="movie-description">${movie.description}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Seite initialisieren
+        displayMovies();
+    </script>
+</body>
+</html>
