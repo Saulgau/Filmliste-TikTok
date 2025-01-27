@@ -4,79 +4,225 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Filmvorführungen</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --background: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+        }
+
         body {
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             line-height: 1.5;
-            background: #111827;
-            color: #e5e7eb;
-            padding: 2rem;
+            background: var(--background);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .main-content {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(to right, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .movie-grid {
             display: grid;
-            gap: 2rem;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         }
 
         .movie-card {
-            background: #1f2937;
-            border-radius: 0.5rem;
+            background: var(--card-bg);
+            border-radius: 1rem;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            transition: transform 0.2s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
         .movie-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .movie-image-container {
+            position: relative;
+            padding-top: 150%;
+            overflow: hidden;
         }
 
         .movie-image {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 400px;
+            height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .movie-card:hover .movie-image {
+            transform: scale(1.05);
         }
 
         .movie-content {
             padding: 1.5rem;
+            position: relative;
         }
 
         .movie-title {
             font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #f3f4f6;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
         }
 
         .movie-datetime {
-            color: #9ca3af;
+            display: inline-block;
+            color: var(--primary);
             font-size: 0.875rem;
+            font-weight: 500;
             margin-bottom: 1rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 9999px;
         }
 
         .movie-description {
-            color: #d1d5db;
+            color: var(--text-secondary);
             font-size: 0.875rem;
             line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 1.5rem;
+            }
+        }
+
+        .badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(99, 102, 241, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            backdrop-filter: blur(4px);
+            z-index: 10;
+        }
+
+        .movie-details {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .movie-info {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .info-item svg {
+            width: 1rem;
+            height: 1rem;
+            opacity: 0.7;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+            100% {
+                background-color: rgba(255, 255, 255, 0.2);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="movie-grid" id="movieGrid"></div>
-    </div>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="header-title">Filmvorführungen</h1>
+            </div>
+        </div>
+    </header>
 
+    <main class="main-content">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Aktuelle Vorführungen</h2>
+            <div class="movie-grid" id="movieGrid"></div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
         const movies = [
             {
@@ -84,14 +230,20 @@
                 date: "2025-01-27",
                 time: "20:00",
                 image: "https://www.jugend-filmjury.com/uploads/fbwdb_film/poster/1febcbf4b08b74254ef5379f0c61fd4772eec112.jpg",
-                description: "Im Land von Oz lebt die junge Frau Elphaba. Durch ihre grüne Haut unterscheidet sie sich von den anderen Kindern und wird oft ausgelacht. Als Schülerin freundet sie sich mit Galinda an. Doch ihr Leben bringt die beiden auseinander: Elphaba verliebt sich in denselben Jungen wie Galinda. Auch die Welt, in der die beiden leben, und ihre unterschiedlichen Erfahrungen damit, sorgt immer mehr für einen Zwist zwischen den beiden Frauen."
+                description: "Im Land von Oz lebt die junge Frau Elphaba. Durch ihre grüne Haut unterscheidet sie sich von den anderen Kindern und wird oft ausgelacht. Als Schülerin freundet sie sich mit Galinda an. Doch ihr Leben bringt die beiden auseinander: Elphaba verliebt sich in denselben Jungen wie Galinda. Auch die Welt, in der die beiden leben, und ihre unterschiedlichen Erfahrungen damit, sorgt immer mehr für einen Zwist zwischen den beiden Frauen.",
+                badge: "Musical/Fantasy",
+                runtime: "160",
+                rating: "FSK 6"
             },
             {
                 title: "Sonic the Hedgehog 3",
                 date: "2025-01-27",
                 time: "22:15",
                 image: "https://m.media-amazon.com/images/M/MV5BYTY3MWZjOTMtMzEwMS00OTcyLWI4MmEtODQwNjllYzZmMWJmXkEyXkFqcGc@._V1_.jpg",
-                description: "Die Erde ist erneut in Gefahr, als der finstere neue Gegner Shadow extreme Macht und Rachegelüste zeigt. Sonic, Knuckles und Tails müssen mit einem unerwarteten Verbündeten zusammenarbeiten, um die Welt retten zu können."
+                description: "Die Erde ist erneut in Gefahr, als der finstere neue Gegner Shadow extreme Macht und Rachegelüste zeigt. Sonic, Knuckles und Tails müssen mit einem unerwarteten Verbündeten zusammenarbeiten, um die Welt retten zu können.",
+                badge: "Action/Abenteuer",
+                runtime: "110",
+                rating: "FSK 12"
             }
         ];
 
@@ -105,25 +257,62 @@
             }) + ' - ' + timeStr + ' Uhr';
         }
 
+        function createMovieCard(movie, index) {
+            const delay = index * 100;
+            const card = document.createElement('div');
+            card.className = 'movie-card';
+            card.setAttribute('data-aos', 'fade-up');
+            card.setAttribute('data-aos-delay', delay);
+            
+            card.innerHTML = `
+                ${movie.badge ? `<div class="badge">${movie.badge}</div>` : ''}
+                <div class="movie-image-container">
+                    <img class="movie-image" src="${movie.image}" alt="${movie.title}" loading="lazy">
+                </div>
+                <div class="movie-content">
+                    <h2 class="movie-title">${movie.title}</h2>
+                    <div class="movie-datetime">${formatDate(movie.date, movie.time)}</div>
+                    <p class="movie-description">${movie.description}</p>
+                    <div class="movie-details">
+                        <div class="movie-info">
+                            <span class="info-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                ${movie.runtime} Minuten
+                            </span>
+                            <span class="info-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                                ${movie.rating}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
         function displayMovies() {
             const grid = document.getElementById('movieGrid');
-            
-            movies.forEach(movie => {
-                const card = document.createElement('div');
-                card.className = 'movie-card';
-                card.innerHTML = `
-                    <img class="movie-image" src="${movie.image}" alt="${movie.title}">
-                    <div class="movie-content">
-                        <h2 class="movie-title">${movie.title}</h2>
-                        <div class="movie-datetime">${formatDate(movie.date, movie.time)}</div>
-                        <p class="movie-description">${movie.description}</p>
-                    </div>
-                `;
+            movies.forEach((movie, index) => {
+                const card = createMovieCard(movie, index);
                 grid.appendChild(card);
             });
         }
 
-        displayMovies();
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true
+        });
+
+        // Display movies with loading state
+        document.addEventListener('DOMContentLoaded', () => {
+            displayMovies();
+        });
     </script>
 </body>
 </html>
