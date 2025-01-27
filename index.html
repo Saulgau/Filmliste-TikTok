@@ -229,23 +229,24 @@
                 title: "Sonic the Hedgehog 3",
                 date: "2025-01-28",
                 time: "20:15",
-                image: "https://m.media-amazon.com/images/M/MV5BYTY3MWZjOTMtMzEwMS00OTcyLWI4MmEtODQwNjllYzZmMWJmXkEyXkFqcGc@._V1_.jpg",
+                image: "/api/placeholder/400/600",
                 description: "Die Erde ist erneut in Gefahr, als der finstere neue Gegner Shadow extreme Macht und Rachegelüste zeigt. Sonic, Knuckles und Tails müssen mit einem unerwarteten Verbündeten zusammenarbeiten, um die Welt retten zu können.",
                 badge: "Action/Abenteuer",
                 runtime: "110",
                 rating: "FSK 12"
-            }
-        ];
-           {
+            },
+            {
                 title: "Gladiator II",
                 date: "2025-01-29",
                 time: "20:15",
-                image: "https://de.web.img2.acsta.net/img/93/01/930169505dfefb05fc3a651304df8c29.jpg",
+                image: "/api/placeholder/400/600",
                 description: "Lucius, der Sohn des ehemaligen Gladiatoren Maximus, wird nach einem überfall des römischen Reiches dazu gezwungen, selbst in der Arena zu kämpfen. Er schwört Rache an Marcus Acacius, dem Mann, der ihn gefangen genommen hat, zu nehmen. Gleichzeitig plant sein Besitzer, Macrinus, einen Coup gegen die beiden römischen Kaiser Caracalla und Geta durchzuführen - und setzt dabei auch auf die Hilfe von Lucius.",
                 badge: "Action/Abenteuer",
                 runtime: "148",
                 rating: "FSK 16"
-            },
+            }
+        ];
+
         function formatDate(dateStr, timeStr) {
             const date = new Date(dateStr + 'T' + timeStr);
             return date.toLocaleDateString('de-DE', {
@@ -308,7 +309,7 @@
             once: true
         });
 
-        // Display movies with loading state
+        // Display movies when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             displayMovies();
         });
