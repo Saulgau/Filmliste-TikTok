@@ -86,7 +86,7 @@
             border-radius: 1rem;
             overflow: hidden;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease-in-out;
             position: relative;
         }
 
@@ -124,7 +124,6 @@
             font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 0.75rem;
-            color: var(--text-primary);
         }
 
         .movie-datetime {
@@ -154,56 +153,6 @@
                 gap: 1.5rem;
             }
         }
-
-        .badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: rgba(99, 102, 241, 0.9);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            font-weight: 500;
-            font-size: 0.875rem;
-            backdrop-filter: blur(4px);
-            z-index: 10;
-        }
-
-        .movie-details {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .movie-info {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-top: 0.5rem;
-        }
-
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        .info-item svg {
-            width: 1rem;
-            height: 1rem;
-            opacity: 0.7;
-        }
-
-        @keyframes skeleton-loading {
-            0% {
-                background-color: rgba(255, 255, 255, 0.1);
-            }
-            100% {
-                background-color: rgba(255, 255, 255, 0.2);
-            }
-        }
     </style>
 </head>
 <body>
@@ -217,12 +166,11 @@
 
     <main class="main-content">
         <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Aktuelle Vorführungen</h2>
+            <h2 class="section-title">Aktuelle Vorführungen</h2>
             <div class="movie-grid" id="movieGrid"></div>
         </div>
     </main>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
         const movies = [
             {
@@ -230,99 +178,44 @@
                 date: "2025-01-29",
                 time: "20:15",
                 image: "https://de.web.img2.acsta.net/img/93/01/930169505dfefb05fc3a651304df8c29.jpg",
-                description: "Lucius, der Sohn des ehemaligen Gladiatoren Maximus, wird nach einem überfall des römischen Reiches dazu gezwungen, selbst in der Arena zu kämpfen. Er schwört Rache an Marcus Acacius, dem Mann, der ihn gefangen genommen hat, zu nehmen. Gleichzeitig plant sein Besitzer, Macrinus, einen Coup gegen die beiden römischen Kaiser Caracalla und Geta durchzuführen - und setzt dabei auch auf die Hilfe von Lucius.",
+                description: "Lucius, der Sohn des ehemaligen Gladiatoren Maximus, wird nach einem Überfall des Römischen Reiches gezwungen, in der Arena zu kämpfen.",
                 badge: "Action/Abenteuer",
                 runtime: "148",
                 rating: "FSK 16"
-            }
-        ],
-                   {
+            },
+            {
                 title: "Guardians of the Galaxy Vol. 3",
                 date: "2025-01-30",
                 time: "20:15",
-                image: "https://lumiere-a.akamaihd.net/v1/images/image_49144473.jpeg?region=0,0,540,810",
-                description: "Peter Quill, der noch immer unter dem Verlust von Gamora leidet, muss sein Team um sich scharen, um das Universum zu verteidigen und einen der seinen schützen zu können. Die Truppe um Star-Lord, Drax und Groot begibt sich auf eine kosmische Odyssee, die eng mit Rockets Vergangenheit verknüpft ist. Ein Scheitern der Mission könnte das Ende der Guardians bedeuten, das nicht zuletzt im Interesse des künstlich erschaffenen Bösewichts Adam Warlock liegt.",
+                image: "https://lumiere-a.akamaihd.net/v1/images/image_49144473.jpeg",
+                description: "Peter Quill muss sein Team zusammenbringen, um das Universum zu verteidigen und Rocket zu retten.",
                 badge: "Action/Abenteuer",
                 runtime: "150",
                 rating: "FSK 12"
             },
-                              {
+            {
                 title: "The Whale",
                 date: "2025-01-31",
                 time: "20:15",
                 image: "https://de.web.img2.acsta.net/pictures/23/03/21/14/03/0494331.jpg",
-                description: "Ein Lehrer hat nach dem Verlust eines geliebten Menschen stark an Übergewicht zugenommen. Er lebt allein und zurückgezogen in seiner Wohnung und gibt Onlinekurse. Eines Tages versucht er, sich mit seiner jugendlichen Tochter zu versöhnen, nachdem er sie im Alter von acht Jahren verlassen hat. Während die entfremdete Tochter ihm allmählich näher kommt, rätseln sie und ihre Verwandten über den Grund des Wiedersehens.",
+                description: "Ein übergewichtiger Lehrer versucht, sich mit seiner entfremdeten Tochter zu versöhnen.",
                 badge: "Drama/Melodram",
                 runtime: "117",
                 rating: "FSK 12"
-            };
-
-        function formatDate(dateStr, timeStr) {
-            const date = new Date(dateStr + 'T' + timeStr);
-            return date.toLocaleDateString('de-DE', {
-                weekday: 'long',
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            }) + ' - ' + timeStr + ' Uhr';
-        }
-
-        function createMovieCard(movie, index) {
-            const delay = index * 100;
-            const card = document.createElement('div');
-            card.className = 'movie-card';
-            card.setAttribute('data-aos', 'fade-up');
-            card.setAttribute('data-aos-delay', delay);
-            
-            card.innerHTML = `
-                ${movie.badge ? `<div class="badge">${movie.badge}</div>` : ''}
-                <div class="movie-image-container">
-                    <img class="movie-image" src="${movie.image}" alt="${movie.title}" loading="lazy">
-                </div>
-                <div class="movie-content">
-                    <h2 class="movie-title">${movie.title}</h2>
-                    <div class="movie-datetime">${formatDate(movie.date, movie.time)}</div>
-                    <p class="movie-description">${movie.description}</p>
-                    <div class="movie-details">
-                        <div class="movie-info">
-                            <span class="info-item">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                ${movie.runtime} Minuten
-                            </span>
-                            <span class="info-item">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                                ${movie.rating}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            `;
-            return card;
-        }
+            }
+        ];
 
         function displayMovies() {
             const grid = document.getElementById('movieGrid');
-            movies.forEach((movie, index) => {
-                const card = createMovieCard(movie, index);
+            movies.forEach(movie => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.innerHTML = `<div class="movie-content"><h2>${movie.title}</h2></div>`;
                 grid.appendChild(card);
             });
         }
 
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            easing: 'ease-out-cubic',
-            once: true
-        });
-
-        // Display movies when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            displayMovies();
-        });
+        document.addEventListener('DOMContentLoaded', displayMovies);
     </script>
 </body>
 </html>
