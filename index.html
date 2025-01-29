@@ -16,7 +16,6 @@
 
         :root {
             --primary: #6366f1;
-            --primary-dark: #4f46e5;
             --background: #0f172a;
             --card-bg: #1e293b;
             --text-primary: #f8fafc;
@@ -24,7 +23,7 @@
         }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: var(--background);
             color: var(--text-primary);
             min-height: 100vh;
@@ -70,7 +69,7 @@
 
         .movie-grid {
             display: grid;
-            gap: 2.5rem;
+            gap: 2rem;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         }
 
@@ -101,11 +100,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .movie-card:hover .movie-image {
-            transform: scale(1.05);
         }
 
         .movie-content {
@@ -119,8 +113,6 @@
         }
 
         .movie-datetime {
-            display: inline-block;
-            color: var(--primary);
             font-size: 0.875rem;
             font-weight: 500;
             margin-bottom: 1rem;
@@ -129,24 +121,11 @@
             border-radius: 9999px;
         }
 
-        .movie-description {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            line-height: 1.6;
-        }
-
-        .badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: rgba(99, 102, 241, 0.9);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            font-weight: 500;
-            font-size: 0.875rem;
-            backdrop-filter: blur(4px);
-            z-index: 10;
+        .progress-bar {
+            height: 8px;
+            background: #6366f1;
+            border-radius: 5px;
+            margin-top: 8px;
         }
     </style>
 </head>
@@ -172,46 +151,55 @@
             {
                 title: "Gladiator II",
                 date: "2025-01-29",
-                time: "20:15",
-                image: "https://de.web.img2.acsta.net/img/93/01/930169505dfefb05fc3a651304df8c29.jpg",
-                description: "Lucius, der Sohn des ehemaligen Gladiatoren Maximus, muss nach einem Überfall des Römischen Reiches selbst kämpfen.",
-                badge: "Action/Abenteuer"
+                runtime: 148,
+                image: "https://de.web.img2.acsta.net/img/93/01/930169505dfefb05fc3a651304df8c29.jpg"
             },
             {
                 title: "Guardians of the Galaxy Vol. 3",
                 date: "2025-01-30",
-                time: "20:15",
-                image: "https://lumiere-a.akamaihd.net/v1/images/image_49144473.jpeg",
-                description: "Peter Quill und sein Team müssen das Universum verteidigen und Rocket retten.",
-                badge: "Action/Abenteuer"
+                runtime: 150,
+                image: "https://lumiere-a.akamaihd.net/v1/images/image_49144473.jpeg"
             },
             {
                 title: "The Whale",
                 date: "2025-01-31",
-                time: "20:15",
-                image: "https://de.web.img2.acsta.net/pictures/23/03/21/14/03/0494331.jpg",
-                description: "Ein übergewichtiger Lehrer sucht die Versöhnung mit seiner entfremdeten Tochter.",
-                badge: "Drama/Melodram"
+                runtime: 117,
+                image: "https://de.web.img2.acsta.net/pictures/23/03/21/14/03/0494331.jpg"
             }
         ];
 
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString("de-DE", { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" });
+        }
+
         function displayMovies() {
             const grid = document.getElementById("movieGrid");
+            const now = new Date();
+            
             movies.forEach((movie, index) => {
+                const movieDate = new Date(movie.date + "T20:15:00");
+                const endTime = new Date(movieDate.getTime() + movie.runtime * 60000);
+                
+                if (now > endTime) {
+                    return;
+                }
+
+                const progress = now > movieDate ? ((now - movieDate) / (endTime - movieDate)) * 100 : 0;
+                
                 const card = document.createElement("div");
                 card.className = "movie-card";
                 card.setAttribute("data-aos", "fade-up");
                 card.setAttribute("data-aos-delay", index * 100);
-
+                
                 card.innerHTML = `
-                    <div class="badge">${movie.badge}</div>
                     <div class="movie-image-container">
                         <img class="movie-image" src="${movie.image}" alt="${movie.title}">
                     </div>
                     <div class="movie-content">
                         <h2 class="movie-title">${movie.title}</h2>
-                        <div class="movie-datetime">${movie.date} - ${movie.time} Uhr</div>
-                        <p class="movie-description">${movie.description}</p>
+                        <div class="movie-datetime">${formatDate(movie.date)} - 20:15 Uhr</div>
+                        <div class="progress-bar" style="width: ${progress}%"></div>
                     </div>
                 `;
 
