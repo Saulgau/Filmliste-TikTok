@@ -25,7 +25,6 @@
 
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            line-height: 1.5;
             background: var(--background);
             color: var(--text-primary);
             min-height: 100vh;
@@ -47,12 +46,6 @@
             padding: 0 2rem;
         }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
         .header-title {
             font-size: 1.5rem;
             font-weight: 700;
@@ -68,11 +61,11 @@
         .section-title {
             font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 2rem;
             text-align: center;
             background: linear-gradient(to right, #6366f1, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
         }
 
         .movie-grid {
@@ -85,14 +78,14 @@
             background: var(--card-bg);
             border-radius: 1rem;
             overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease-in-out;
             position: relative;
         }
 
         .movie-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
         }
 
         .movie-image-container {
@@ -117,7 +110,6 @@
 
         .movie-content {
             padding: 1.5rem;
-            position: relative;
         }
 
         .movie-title {
@@ -132,8 +124,8 @@
             font-size: 0.875rem;
             font-weight: 500;
             margin-bottom: 1rem;
-            padding: 0.25rem 0.75rem;
             background: rgba(99, 102, 241, 0.1);
+            padding: 0.25rem 0.75rem;
             border-radius: 9999px;
         }
 
@@ -143,24 +135,25 @@
             line-height: 1.6;
         }
 
-        @media (max-width: 768px) {
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .movie-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-                gap: 1.5rem;
-            }
+        .badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(99, 102, 241, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            backdrop-filter: blur(4px);
+            z-index: 10;
         }
     </style>
 </head>
 <body>
     <header class="header">
         <div class="container">
-            <div class="header-content">
-                <h1 class="header-title">Filmvorführungen</h1>
-            </div>
+            <h1 class="header-title">Filmvorführungen</h1>
         </div>
     </header>
 
@@ -171,51 +164,62 @@
         </div>
     </main>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
+        AOS.init();
+
         const movies = [
             {
                 title: "Gladiator II",
                 date: "2025-01-29",
                 time: "20:15",
                 image: "https://de.web.img2.acsta.net/img/93/01/930169505dfefb05fc3a651304df8c29.jpg",
-                description: "Lucius, der Sohn des ehemaligen Gladiatoren Maximus, wird nach einem Überfall des Römischen Reiches gezwungen, in der Arena zu kämpfen.",
-                badge: "Action/Abenteuer",
-                runtime: "148",
-                rating: "FSK 16"
+                description: "Lucius, der Sohn des ehemaligen Gladiatoren Maximus, muss nach einem Überfall des Römischen Reiches selbst kämpfen.",
+                badge: "Action/Abenteuer"
             },
             {
                 title: "Guardians of the Galaxy Vol. 3",
                 date: "2025-01-30",
                 time: "20:15",
                 image: "https://lumiere-a.akamaihd.net/v1/images/image_49144473.jpeg",
-                description: "Peter Quill muss sein Team zusammenbringen, um das Universum zu verteidigen und Rocket zu retten.",
-                badge: "Action/Abenteuer",
-                runtime: "150",
-                rating: "FSK 12"
+                description: "Peter Quill und sein Team müssen das Universum verteidigen und Rocket retten.",
+                badge: "Action/Abenteuer"
             },
             {
                 title: "The Whale",
                 date: "2025-01-31",
                 time: "20:15",
                 image: "https://de.web.img2.acsta.net/pictures/23/03/21/14/03/0494331.jpg",
-                description: "Ein übergewichtiger Lehrer versucht, sich mit seiner entfremdeten Tochter zu versöhnen.",
-                badge: "Drama/Melodram",
-                runtime: "117",
-                rating: "FSK 12"
+                description: "Ein übergewichtiger Lehrer sucht die Versöhnung mit seiner entfremdeten Tochter.",
+                badge: "Drama/Melodram"
             }
         ];
 
         function displayMovies() {
-            const grid = document.getElementById('movieGrid');
-            movies.forEach(movie => {
-                const card = document.createElement('div');
-                card.className = 'movie-card';
-                card.innerHTML = `<div class="movie-content"><h2>${movie.title}</h2></div>`;
+            const grid = document.getElementById("movieGrid");
+            movies.forEach((movie, index) => {
+                const card = document.createElement("div");
+                card.className = "movie-card";
+                card.setAttribute("data-aos", "fade-up");
+                card.setAttribute("data-aos-delay", index * 100);
+
+                card.innerHTML = `
+                    <div class="badge">${movie.badge}</div>
+                    <div class="movie-image-container">
+                        <img class="movie-image" src="${movie.image}" alt="${movie.title}">
+                    </div>
+                    <div class="movie-content">
+                        <h2 class="movie-title">${movie.title}</h2>
+                        <div class="movie-datetime">${movie.date} - ${movie.time} Uhr</div>
+                        <p class="movie-description">${movie.description}</p>
+                    </div>
+                `;
+
                 grid.appendChild(card);
             });
         }
 
-        document.addEventListener('DOMContentLoaded', displayMovies);
+        document.addEventListener("DOMContentLoaded", displayMovies);
     </script>
 </body>
 </html>
